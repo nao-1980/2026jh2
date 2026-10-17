@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F6FDB">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>5教科ノート 中2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap">
+<style>
+/* Layout: 1画面1問のシール手帳。上にログフィルム、下に大きな答えボタン */
+:root{
+  --bg:#F2F6FD; --dot:#D6E2F6; --card:#FFFFFF; --line:#D0DDF2; --shadow:#BACDEE;
+  --ink:#22304A; --sub:#66758F; --pink:#2F6FDB; --pinkL:#DEEAFB; --lav:#1E8CA8; --lavL:#DDF1F6;
+  --ok:#22A884; --okL:#DDF5EE; --ng:#E8536E; --ngL:#FDE3E8; --memo:#FFF9E8; --memoLine:#E9C97A;
+  --btnEdge:#22304A; --gray:#CFD7E6;
+  --fKoku:#6C9EF0; --fMath:#B49BFF; --fEng:#FF9DBB; --fSci:#5ED3A8; --fSoc:#FFC75A; --faceInk:#22304A;
+  --head:"Mochiy Pop One","M PLUS Rounded 1c","Hiragino Maru Gothic ProN",sans-serif;
+  --body:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121A2B; --dot:#1D2940; --card:#1B2539; --line:#2E3D5C; --shadow:#0A0F1A;
+  --ink:#E8EEF9; --sub:#A3B1CC; --pink:#3F7FE6; --pinkL:#1E3360; --lav:#3BB0CC; --lavL:#173845;
+  --ok:#4FD1A9; --okL:#173A31; --ng:#FF7C93; --ngL:#45222B; --memo:#3A3122; --memoLine:#8C7440;
+  --btnEdge:#070B14; --gray:#3A4660; --fKoku:#5A8BE0; --fMath:#9A80F2; --fEng:#E883A3; --fSci:#3FBB8F; --fSoc:#E9AD45; --faceInk:#141C2E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121A2B; --dot:#1D2940; --card:#1B2539; --line:#2E3D5C; --shadow:#0A0F1A;
+  --ink:#E8EEF9; --sub:#A3B1CC; --pink:#3F7FE6; --pinkL:#1E3360; --lav:#3BB0CC; --lavL:#173845;
+  --ok:#4FD1A9; --okL:#173A31; --ng:#FF7C93; --ngL:#45222B; --memo:#3A3122; --memoLine:#8C7440;
+  --btnEdge:#070B14; --gray:#3A4660; --fKoku:#5A8BE0; --fMath:#9A80F2; --fEng:#E883A3; --fSci:#3FBB8F; --fSoc:#E9AD45; --faceInk:#141C2E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);background-image:radial-gradient(var(--dot) 1.6px,transparent 1.7px);background-size:22px 22px;
+  color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.7;font-weight:700;padding-inline:16px;padding-block:12px 40px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--head);font-weight:400;margin:0;text-wrap:balance;line-height:1.35}
+h1{font-size:1.6rem}h2{font-size:1.3rem}h3{font-size:1.1rem}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;box-shadow:0 6px 0 var(--shadow);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.btn{font:inherit;font-weight:800;color:var(--ink);background:var(--card);border:2.5px solid var(--btnEdge);border-radius:999px;
+  box-shadow:0 5px 0 var(--btnEdge);padding:12px 18px;cursor:pointer;transition:transform .08s,box-shadow .08s;min-height:52px;font-size:1.05rem}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--btnEdge)}
+.btn:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-offset:3px}
+.btn.main{background:var(--pink);color:#fff}
+.btn.lav{background:var(--lav);color:#fff}
+.btn.small{min-height:40px;padding:6px 14px;font-size:.9rem;box-shadow:0 3px 0 var(--btnEdge)}
+.btn:disabled{opacity:.5;cursor:default}
+.pill{display:inline-block;border-radius:999px;padding:2px 12px;font-size:.8rem;background:var(--lavL);color:var(--lav);letter-spacing:.04em}
+.pill.pk{background:var(--pinkL);color:var(--pink)}
+.sub{color:var(--sub);font-size:.9rem;font-weight:500}
+.count{display:flex;align-items:baseline;gap:6px;font-family:var(--head)}
+.count b{font-size:2.4rem;color:var(--pink);font-weight:400;font-variant-numeric:tabular-nums}
+.subjects{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.subj{text-align:left;display:flex;flex-direction:column;gap:6px;border-radius:24px;padding:14px;min-height:auto}
+.subj .nm{font-family:var(--head);font-weight:400;font-size:1.25rem}
+.bar{height:10px;border-radius:99px;background:var(--pinkL);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pink);border-radius:99px}
+.subj:last-child:nth-child(odd){grid-column:1/-1}
+label{font-size:.95rem}
+input[type=text]{font:inherit;font-size:1.15rem;width:100%;padding:12px 16px;border-radius:16px;border:2.5px solid var(--line);background:var(--card);color:var(--ink)}
+textarea{font:inherit;font-size:1.1rem;width:100%;padding:12px 16px;border-radius:16px;border:2.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical;line-height:1.6}
+textarea:focus-visible{outline:3px solid var(--lav);outline-offset:3px}
+textarea[readonly]{background:var(--bg)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.cmp{grid-template-columns:1fr}}
+.shiki{white-space:pre-wrap;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;background:var(--bg);border-radius:14px;padding:10px 12px;font-size:1.05rem;min-width:0}
+.shiki.ex{background:var(--memo);border:2px dashed var(--memoLine)}
+.film{display:flex;gap:6px;background:var(--ink);padding:8px 10px;border-radius:12px;overflow-x:auto}
+.film span{flex:0 0 34px;height:34px;border-radius:6px;background:var(--gray);display:grid;place-items:center;color:#fff;font-size:1.1rem}
+.film span.ok{background:var(--pink)}.film span.now{background:var(--lav)}
+.qhead{display:flex;gap:12px;align-items:center}
+.qhead svg{flex:0 0 64px}
+.qtext{font-size:1.3rem;line-height:1.6;font-weight:800}
+.choices{display:flex;flex-direction:column;gap:12px}
+.choices .btn{text-align:left;border-radius:18px;font-size:1.1rem}
+.choices .btn.ok{background:var(--okL);border-color:var(--ok);box-shadow:0 5px 0 var(--ok)}
+.choices .btn.ng{background:var(--ngL);border-color:var(--ng);box-shadow:0 5px 0 var(--ng)}
+.memo{background:var(--memo);border:2px dashed var(--memoLine);border-radius:18px;padding:12px 14px;font-weight:500}
+.fb{border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.fb.ok{background:var(--okL)}.fb.ng{background:var(--ngL)}
+.fb .big{font-family:var(--head);font-size:1.3rem}
+.fb.ok .big{color:var(--ok)}.fb.ng .big{color:var(--ng)}
+.kanji{font-size:1.6rem;letter-spacing:.1em}
+.kanji .x{color:var(--ng);text-decoration:underline wavy;text-underline-offset:6px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row .btn{flex:1 1 140px}
+.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.9);opacity:.4}100%{transform:scale(1);opacity:1}}
+.fall{position:fixed;top:-30px;pointer-events:none;font-size:24px;animation:fall 1.5s ease-in forwards;z-index:9}
+@keyframes fall{to{transform:translateY(105vh) rotate(260deg)}}
+.sticker{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);background:var(--pink);color:#fff;font-family:var(--head);font-size:2rem;
+  padding:14px 28px;border-radius:999px;border:3px solid var(--btnEdge);box-shadow:0 6px 0 var(--btnEdge);z-index:10;animation:purun .6s cubic-bezier(.3,1.8,.5,1)}
+@keyframes purun{0%{transform:translate(-50%,-50%) scale(.3)}100%{transform:translate(-50%,-50%) scale(1)}}
+.share{background:var(--lavL);border-radius:16px;padding:12px;white-space:pre-wrap;font-weight:500;user-select:all;overflow-wrap:anywhere}
+.pic{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:4px;align-items:center}
+.pic svg{width:100%;max-width:340px;height:auto;display:block}
+.pictag{align-self:flex-start;font-family:var(--head);font-size:.9rem;color:var(--pink)}
+.piccap{font-size:.95rem;text-align:center}
+.pic.pre svg{max-width:220px}
+body.typing .top,body.typing .film,body.typing .qhead svg,body.typing .pic.pre{display:none}
+body.typing .wrap{gap:10px}
+body.typing #qc{padding:14px;gap:10px}
+.tl{list-style:none;margin:0;padding:0 0 0 18px;border-left:3px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.tl li{position:relative;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.tl li::before{content:"";position:absolute;left:-28px;top:16px;width:14px;height:14px;border-radius:50%;background:var(--card);border:3px solid var(--line)}
+.tl li.now{border-color:var(--pink);box-shadow:0 5px 0 var(--shadow)}
+.tl li.now::before{background:var(--pink);border-color:var(--pink)}
+.tl li.done{opacity:.55}
+.tlwhen{font-size:.85rem;color:var(--sub);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tlttl{font-family:var(--head);font-size:1.1rem;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tld{font-weight:500;font-size:.95rem}
+.tag{font-family:var(--body);font-size:.72rem;border-radius:99px;padding:1px 9px;font-weight:800}
+.t-内申{background:var(--pink);color:#fff}.t-入試{background:var(--ngL);color:var(--ng)}.t-学校{background:var(--lavL);color:var(--lav)}.t-自分{background:var(--okL);color:var(--ok)}
+.teachcard{border-top:2px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:99px;font-size:.9rem;z-index:11}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+const SUBJ={
+  koku:{nm:"国語",col:"var(--pink)",prop:"brush"},
+  math:{nm:"数学",col:"var(--lav)",prop:"ruler"},
+  eng:{nm:"英語",col:"var(--pink)",prop:"abc"},
+  sci:{nm:"理科",col:"var(--lav)",prop:"flask"},
+  soc:{nm:"社会",col:"var(--pink)",prop:"globe"}
+};
+// c[0] が正解（表示時にシャッフル）。t:"in" は書いて答える問題
+const Q=[
+// ===== 国語 =====
+{id:"K01",s:"koku",u:"漢字の書き",t:"in",a:"挑戦",q:["「ちょうせん」を漢字で書こう。","「新しい記録にちょうせんする」の「ちょうせん」を漢字で！","むずかしいことに立ち向かう「ちょうせん」。漢字で書くと？"],why:"「挑」はいどむ、「戦」はたたかう。",tip:"「挑」はてへん。「桃（きへん）」と書きまちがえないでね。",hint:"1字目は「てへん」の字だよ。"},
+{id:"K02",s:"koku",u:"漢字の書き",t:"in",a:"複雑",q:["「ふくざつ」を漢字で書こう。","「ふくざつな気持ち」の「ふくざつ」を漢字で！","こみいっていること「ふくざつ」。漢字で書くと？"],why:"「複」はかさなる、「雑」はまじる。いろいろ重なってまじっている様子。",tip:"「複」はころもへん（衤）。しめすへん（礻）とまちがえやすいよ。",hint:"1字目は「ころもへん」の字だよ。"},
+{id:"K03",s:"koku",u:"漢字の読み",c:["おだやか","なごやか","すこやか","ゆるやか"],q:["「穏やか」の読みは？","「穏やかな海」の「穏やか」はどう読む？","次の読みを選ぼう：「穏やか」"],why:"「穏やか」＝おだやか。しずかで落ち着いている様子。",tip:"「平穏（へいおん）」の「穏」。訓読みは「おだやか」。",hint:"しずかで落ち着いた様子を表す言葉だよ。"},
+{id:"K04",s:"koku",u:"漢字の読み",c:["あわてる","あせる","あきれる","あばれる"],q:["「慌てる」の読みは？","「寝坊して慌てる」の「慌てる」はどう読む？","次の読みを選ぼう：「慌てる」"],why:"「慌てる」＝あわてる。急いで落ち着かない様子。",tip:"「大慌て（おおあわて）」で覚えよう。",hint:"急いで、落ち着かない様子だよ。"},
+{id:"K05",s:"koku",u:"動詞の活用",tg:"テストによく出る",c:["五段活用","上一段活用","下一段活用","カ行変格活用"],q:["「書く」の活用の種類は？","動詞「書く」は何活用？","次の動詞の活用の種類を選ぼう：「書く」"],why:"「ない」をつけると「書かない」。「か」がア段の音なので五段活用。",tip:"「ない」をつけて、直前がア段→五段、イ段→上一段、エ段→下一段。",hint:"「ない」をつけてみよう。"},
+{id:"K06",s:"koku",u:"動詞の活用",c:["上一段活用","五段活用","下一段活用","サ行変格活用"],q:["「起きる」の活用の種類は？","動詞「起きる」は何活用？","次の動詞の活用の種類を選ぼう：「起きる」"],why:"「起きない」。「き」がイ段の音なので上一段活用。",tip:"イ段＝上一段。「イ」は「ウ」より上だから「上」と覚えよう。",hint:"「ない」をつけて、直前の音を見よう。"},
+{id:"K07",s:"koku",u:"活用形",c:["仮定形","命令形","連用形","未然形"],q:["「走れば間に合う」の「走れ」の活用形は？","「走れば」の「走れ」は何形？","次の活用形を選ぼう：「走れば」の「走れ」"],why:"「ば」に続く形は仮定形。",tip:"未然形→ない、連用形→ます、終止形→。、連体形→とき、仮定形→ば、命令形→！",hint:"あとに「ば」が続いているね。"},
+{id:"K08",s:"koku",u:"敬語",tg:"テストによく出る",c:["伺う","いらっしゃる","おいでになる","行かれる"],q:["「先生のお宅に行く」。自分が行くときの正しい敬語は？","自分が先生の家に「行く」とき、ふさわしい言い方は？","「明日、先生のお宅に〇〇ます」。〇〇に入る謙譲語は？"],why:"自分の動作をへりくだるのは謙譲語。「行く」の謙譲語は「伺う・参る」。",tip:"主語が自分→謙譲語、主語が相手→尊敬語。",hint:"行くのは自分。自分をへりくだる言い方だよ。"},
+{id:"K09",s:"koku",u:"敬語",c:["尊敬語","謙譲語","丁寧語","方言"],q:["「先生がおっしゃる」の「おっしゃる」は何語？","「おっしゃる」は敬語のどの種類？","「校長先生がおっしゃった」。この敬語の種類は？"],why:"「おっしゃる」は「言う」の尊敬語。相手（先生）の動作を高めている。",tip:"言う→おっしゃる（尊敬）／申す・申し上げる（謙譲）。",hint:"言っているのは先生だね。"},
+{id:"K10",s:"koku",u:"熟語の構成",c:["強弱","岩石","読書","急増"],q:["「上下」と同じ組み立ての熟語は？","反対の意味の字を組み合わせた熟語を選ぼう。","「上下」のように、反対の意味の字を重ねた熟語は？"],why:"「上下」も「強弱」も、反対の意味の字を組み合わせている。",tip:"岩石＝似た意味、読書＝下が目的、急増＝上が下を修飾。",hint:"「強い」と「弱い」の関係は？"},
+// ===== 数学 =====
+{id:"M01",s:"math",u:"式の計算",c:["2a ＋ 6b","2a − 2b","4a ＋ 6b","2a ＋ 2b"],q:["3a ＋ 2b − (a − 4b) を計算しよう。","3a ＋ 2b − (a − 4b) ＝ ？","次の式を計算しよう：3a ＋ 2b − (a − 4b)"],why:"かっこをはずすと 3a＋2b−a＋4b。同類項をまとめて 2a＋6b。",tip:"かっこの前が「−」なら、中の符号を全部変える。",hint:"−(a − 4b) は −a ＋ 4b だよ。"},
+{id:"M02",s:"math",u:"単項式の乗除",c:["2a","2ab","3a","2a²"],q:["6a²b ÷ 3ab を計算しよう。","6a²b ÷ 3ab ＝ ？","次の計算の答えは？ 6a²b ÷ 3ab"],why:"分数にして約分。6÷3＝2、a²÷a＝a、b÷b＝1。答えは 2a。",tip:"わり算は分数の形にして約分するとミスしにくい。",hint:"6a²b / 3ab と分数にしてみよう。"},
+{id:"M03",s:"math",u:"単項式の乗除",tg:"テストによく出る",c:["12x³","−12x³","6x³","12x²"],q:["(−2x)² × 3x を計算しよう。","(−2x)² × 3x ＝ ？","次の計算の答えは？ (−2x)² × 3x"],why:"(−2x)²＝4x²。4x²×3x＝12x³。",tip:"2乗はかっこの中の数も文字も2回かける。マイナスも消える！",hint:"まず (−2x)² を計算しよう。"},
+{id:"M04",s:"math",u:"等式の変形",c:["y ＝ 7 − 2x","y ＝ 7 ＋ 2x","y ＝ (7 − x) ÷ 2","y ＝ 2x − 7"],q:["2x ＋ y ＝ 7 を y について解くと？","等式 2x ＋ y ＝ 7 を「y ＝」の形にしよう。","2x ＋ y ＝ 7 を y について解いた式は？"],why:"2x を右辺に移項して y＝7−2x。",tip:"「〜について解く」＝その文字だけを左に残す。",hint:"2x を右辺に移項しよう。"},
+{id:"M05",s:"math",u:"式の値",t:"in",a:"−7",q:["a＝3, b＝−2 のとき、2(a＋b) − (a−3b) の値は？","a＝3、b＝−2 を 2(a＋b) − (a−3b) に代入した値は？","2(a＋b) − (a−3b) の値を求めよう（a＝3, b＝−2）。"],why:"先に式を簡単にすると a＋5b。3＋5×(−2)＝3−10＝−7。",tip:"代入の前に、式をできるだけ簡単にすると楽！",hint:"まず 2(a＋b) − (a−3b) を整理しよう。"},
+{id:"M06",s:"math",u:"連立方程式",c:["x＝4, y＝3","x＝3, y＝4","x＝5, y＝2","x＝6, y＝1"],q:["x ＋ y ＝ 7、x − y ＝ 1 を解こう。","連立方程式 x＋y＝7、x−y＝1 の解は？","次の連立方程式を解こう：x＋y＝7、x−y＝1"],why:"2式をたすと 2x＝8 で x＝4。x＋y＝7 に入れて y＝3。",tip:"y の符号がちがうときは、たすと y が消える（加減法）。",hint:"2つの式をたしてみよう。"},
+{id:"M07",s:"math",u:"連立方程式",c:["x＝3, y＝6","x＝6, y＝3","x＝5, y＝10","x＝2, y＝4"],q:["y ＝ 2x、3x ＋ y ＝ 15 を解こう。","連立方程式 y＝2x、3x＋y＝15 の解は？","次の連立方程式を解こう：y＝2x、3x＋y＝15"],why:"y＝2x を代入して 3x＋2x＝15、x＝3。y＝2×3＝6。",tip:"「y＝」の式があったら代入法が早い。",hint:"y のところに 2x を入れよう。"},
+{id:"M08",s:"math",u:"連立方程式の利用",tg:"テストによく出る",c:["あめ6個、ガム4個","あめ4個、ガム6個","あめ5個、ガム5個","あめ7個、ガム3個"],q:["1個50円のあめと1個80円のガムを合わせて10個買ったら620円。それぞれ何個？","あめ（50円）とガム（80円）を合計10個、620円分買った。個数は？","50円のあめと80円のガムを全部で10個買い、代金は620円。あめとガムは何個ずつ？"],why:"あめ x 個、ガム y 個として x＋y＝10、50x＋80y＝620。解くと x＝6、y＝4。",tip:"「個数の式」と「代金の式」の2本をつくる。",hint:"x＋y＝10 と 50x＋80y＝620 の2つの式だよ。"},
+{id:"M09",s:"math",u:"1次関数",c:["傾き 2、切片 −3","傾き −3、切片 2","傾き 2、切片 3","傾き 3、切片 −2"],q:["y ＝ 2x − 3 の傾きと切片は？","1次関数 y＝2x−3 のグラフの傾きと切片を選ぼう。","y ＝ 2x − 3 について、正しい組み合わせは？"],why:"y＝ax＋b の a が傾き、b が切片。a＝2、b＝−3。",tip:"x についている数＝傾き、ついていない数＝切片。",hint:"y＝ax＋b の形とくらべよう。"},
+{id:"M10",s:"math",u:"1次関数の式",c:["y ＝ 2x ＋ 1","y ＝ 2x ＋ 3","y ＝ 4x − 1","y ＝ x ＋ 2"],q:["2点 (1, 3)、(3, 7) を通る直線の式は？","点(1, 3)と点(3, 7)を通る1次関数の式を選ぼう。","(1, 3)、(3, 7) を通る直線を表す式は？"],why:"傾き＝(7−3)÷(3−1)＝2。y＝2x＋b に (1, 3) を入れて b＝1。",tip:"傾きを先に出してから、1点を代入して切片を求める。",hint:"まず傾きを求めよう。"},
+// ===== 英語 =====
+{id:"E01",s:"eng",u:"過去進行形",c:["was","were","am","did"],q:["I ( ) watching TV then.","( )に入る語は？ I ( ) watching TV then.","「私はそのときテレビを見ていました」I ( ) watching TV then."],why:"過去進行形は was / were ＋ 〜ing。主語が I なので was。",tip:"I / he / she → was、you / we / they → were。",hint:"then（そのとき）は過去だね。"},
+{id:"E02",s:"eng",u:"be going to",c:["going","go","will","went"],q:["I'm ( ) to visit Kyoto next week.","( )に入る語は？ I'm ( ) to visit Kyoto next week.","「来週、京都を訪れる予定です」I'm ( ) to visit Kyoto next week."],why:"be going to ＋ 動詞の原形 で「〜する予定だ」。",tip:"予定は be going to、その場で決めたことは will が多い。",hint:"be ○○ to の形を思い出そう。"},
+{id:"E03",s:"eng",u:"will",c:["will","is","does","was"],q:["It ( ) rain tomorrow.","( )に入る語は？ It ( ) rain tomorrow.","「明日は雨が降るでしょう」It ( ) rain tomorrow."],why:"未来のことは will ＋ 動詞の原形。",tip:"will のあとは必ず原形。",hint:"tomorrow は未来だね。"},
+{id:"E04",s:"eng",u:"接続詞 when",c:["When","If","Because","Than"],q:["( ) I got home, my mother was cooking.","( )に入る語は？ ( ) I got home, my mother was cooking.","「私が家に着いたとき、母は料理をしていました」( ) I got home, ..."],why:"「〜するとき」は接続詞 when。",tip:"when＝とき、if＝もし、because＝なぜなら。",hint:"「家に着いた『とき』」だね。"},
+{id:"E05",s:"eng",u:"接続詞 because",c:["because","but","so","or"],q:["I stayed home ( ) I was sick.","( )に入る語は？ I stayed home ( ) I was sick.","「具合が悪かったので家にいました」I stayed home ( ) I was sick."],why:"理由を表す「〜なので」は because。",tip:"because のあとに理由、so のあとに結果。",hint:"家にいた理由をつなげているよ。"},
+{id:"E06",s:"eng",u:"不定詞（名詞的用法）",tg:"テストによく出る",c:["to be","be","being","am"],q:["I want ( ) a doctor.","( )に入る語は？ I want ( ) a doctor.","「私は医者になりたい」I want ( ) a doctor."],why:"want to ＋ 動詞の原形 で「〜したい」。be の原形を使って to be。",tip:"want to 〜＝〜したい。to のあとは原形。",hint:"want のあとに「to ＋原形」が来るよ。"},
+{id:"E07",s:"eng",u:"不定詞（副詞的用法）",c:["to","for","in","at"],q:["I went to the library ( ) study.","( )に入る語は？ I went to the library ( ) study.","「勉強するために図書館へ行きました」I went to the library ( ) study."],why:"「〜するために」は to ＋ 動詞の原形。",tip:"目的を表す to。Why? と聞かれて答えるときにも使う。",hint:"study は動詞。動詞の前に置くのは？"},
+{id:"E08",s:"eng",u:"There is / are",c:["are","is","be","am"],q:["There ( ) two cats under the table.","( )に入る語は？ There ( ) two cats under the table.","「テーブルの下にねこが2匹います」There ( ) two cats under the table."],why:"There is / are のあとの名詞が複数（two cats）なので are。",tip:"後ろが1つなら is、2つ以上なら are。",hint:"cats は1匹？それとも複数？"},
+{id:"E09",s:"eng",u:"接続詞 that",c:["that","what","when","who"],q:["I think ( ) he is kind.","( )に入る語は？ I think ( ) he is kind.","「彼は親切だと思います」I think ( ) he is kind."],why:"「〜だと思う」は I think that 〜。that は省略することもある。",tip:"think / know / hope のあとの that は「〜ということ」。",hint:"「〜ということ」をつなぐ語だよ。"},
+{id:"E10",s:"eng",u:"不規則動詞",c:["went","goed","gone","going"],q:["go の過去形は？","「行った」は英語で？ go の過去形を選ぼう。","I ( ) to the park yesterday. に入る go の形は？"],why:"go の過去形は went。ed をつけない不規則動詞。",tip:"go-went-gone。セットで声に出して覚えよう。",hint:"ed はつかないよ。"},
+// ===== 理科 =====
+{id:"S01",s:"sci",u:"分解",c:["二酸化炭素","酸素","水素","アンモニア"],q:["炭酸水素ナトリウムを加熱して出た気体を石灰水に通すと白くにごった。気体は？","炭酸水素ナトリウムの熱分解で発生する気体は？","加熱で出た気体が石灰水を白くにごらせた。何の気体？"],why:"炭酸水素ナトリウムは分解して、炭酸ナトリウム・水・二酸化炭素になる。石灰水を白くにごらせるのは二酸化炭素。",tip:"石灰水が白くにごる＝二酸化炭素。",hint:"石灰水を白くにごらせる気体だよ。"},
+{id:"S02",s:"sci",u:"水の電気分解",tg:"テストによく出る",c:["水素","酸素","二酸化炭素","塩素"],q:["水の電気分解で、陰極に発生する気体は？","水を電気分解したとき、陰極側に集まる気体は？","水の電気分解。陰極から出た気体にマッチの火を近づけると音を立てて燃えた。気体は？"],why:"陰極に水素、陽極に酸素ができる。体積は水素：酸素＝2：1。",tip:"陰極（−）に水素。「インスイ（陰・水）」で覚えよう。",hint:"体積が多いほうの気体だよ。"},
+{id:"S03",s:"sci",u:"化学式",c:["H₂O","HO₂","H₂O₂","OH"],q:["水の化学式は？","水を化学式で表すと？","水分子を表す化学式を選ぼう。"],why:"水分子は水素原子2個と酸素原子1個でできている。H₂O。",tip:"原子の数は右下に小さく書く。1は書かない。",hint:"水素（H）が2個、酸素（O）が1個。"},
+{id:"S04",s:"sci",u:"化合",c:["硫化鉄","酸化鉄","硫酸","鉄と硫黄のまま"],q:["鉄と硫黄の混合物を加熱すると、何ができる？","鉄粉と硫黄を加熱したときにできる物質は？","Fe ＋ S → ？ できる物質を選ぼう。"],why:"鉄と硫黄が結びついて硫化鉄（FeS）ができる。磁石につかない別の物質になる。",tip:"〇〇と硫黄→硫化〇〇。〇〇と酸素→酸化〇〇。",hint:"硫黄と結びついた物質の名前は「硫化〜」。"},
+{id:"S05",s:"sci",u:"酸化と還元",c:["還元","酸化","分解","燃焼"],q:["酸化銅と炭素を加熱すると銅ができる。酸化銅に起きた化学変化は？","酸化物から酸素がうばわれる化学変化を何という？","酸化銅が銅にもどる変化の名前は？"],why:"酸素がうばわれるのが還元。このとき炭素は酸化されて二酸化炭素になる。",tip:"酸素とくっつく＝酸化、酸素がはなれる＝還元。同時に起きる！",hint:"酸素が「はなれる」変化だよ。"},
+{id:"S06",s:"sci",u:"質量の変化",t:"in",a:"0.2",unit:"g",q:["銅0.8gを完全に酸化させたら酸化銅が1.0gできた。結びついた酸素は何g？（数字で）","0.8gの銅が1.0gの酸化銅になった。酸素は何g結びついた？","銅0.8g → 酸化銅1.0g。結びついた酸素の質量は？"],why:"増えた分が酸素。1.0−0.8＝0.2g。銅：酸素＝4：1。",tip:"結びついた酸素＝酸化後の質量−もとの質量。",hint:"増えた質量は何の分？"},
+{id:"S07",s:"sci",u:"細胞のつくり",c:["細胞壁","核","細胞膜","細胞質"],q:["植物の細胞にだけあって、動物の細胞にないものは？","植物細胞と動物細胞をくらべたとき、植物細胞だけにあるのは？","植物の体を支える、植物細胞だけのつくりは？"],why:"細胞壁は植物細胞だけにあり、体を支える。葉緑体・液胞も植物細胞の特徴。",tip:"植物だけ：細胞壁・葉緑体・液胞。両方：核・細胞膜。",hint:"細胞のいちばん外側にある、じょうぶなつくりだよ。"},
+{id:"S08",s:"sci",u:"光合成",c:["酸素","二酸化炭素","窒素","水素"],q:["光合成でデンプンといっしょにできる気体は？","植物が光合成をすると出てくる気体は？","光合成で、葉から出ていく気体を選ぼう。"],why:"光合成は水と二酸化炭素から、光のエネルギーでデンプンと酸素をつくる。",tip:"入る：水・二酸化炭素、出る：デンプン・酸素。",hint:"わたしたちが呼吸で使う気体だよ。"},
+{id:"S09",s:"sci",u:"蒸散",c:["蒸散","光合成","呼吸","吸収"],q:["植物の体から、水が水蒸気になって出ていくことを何という？","気孔から水蒸気が出ていくはたらきは？","葉の気孔から水が水蒸気として出ていく現象の名前は？"],why:"蒸散は主に葉の気孔で起こり、根から水を吸い上げる力にもなる。",tip:"蒸（むして）散（ちらす）＝水蒸気を出す。",hint:"「蒸」の字が入るよ。"},
+{id:"S10",s:"sci",u:"単細胞生物",c:["ゾウリムシ","ミジンコ","メダカ","オオカナダモ"],q:["体が1つの細胞でできている生物は？","単細胞生物はどれ？","1つの細胞だけで生きている生物を選ぼう。"],why:"ゾウリムシやミカヅキモは単細胞生物。ミジンコは多くの細胞でできた多細胞生物。",tip:"単細胞生物の例：ゾウリムシ・アメーバ・ミカヅキモ。",hint:"顕微鏡で見る、ぞうりの形をした生物だよ。"},
+// ===== 社会 =====
+{id:"H01",s:"soc",u:"日本の気候",c:["北西の季節風が日本海で水分をふくみ、山地にぶつかるから","南東の季節風が太平洋から吹くから","梅雨前線が長くとどまるから","台風が多く通るから"],q:["日本海側で冬に雪が多い理由は？","冬、日本海側の地域に雪が多く降るのはなぜ？","日本海側の冬の降水（雪）が多い理由として正しいものは？"],why:"冬の北西の季節風が日本海で水蒸気をふくみ、山地にぶつかって雪を降らせる。",tip:"冬は北西から、夏は南東から季節風。",hint:"冬の季節風はどの方角から吹く？"},
+{id:"H02",s:"soc",u:"九州地方",c:["シラス台地","関東ローム","カルスト台地","扇状地"],q:["鹿児島県など九州南部に広がる、火山の噴出物でできた台地は？","九州南部の、水もちが悪い火山灰の台地を何という？","畜産やさつまいもの栽培がさかんな九州南部の台地は？"],why:"シラス台地は火山の噴出物が積もってできた。水もちが悪いので畜産や畑作が中心。",tip:"シラス＝白い砂。九州南部、桜島の近く。",hint:"カタカナ3文字の名前がつく台地だよ。"},
+{id:"H03",s:"soc",u:"中国・四国地方",c:["夏も冬も、山地が季節風をさえぎるから","一年中、台風が通るから","海流の影響で気温が低いから","雪どけ水が少ないから"],q:["瀬戸内の地域が一年を通して雨が少ない理由は？","瀬戸内の気候で降水量が少ないのはなぜ？","瀬戸内海の沿岸で雨が少ない理由を選ぼう。"],why:"夏の季節風は四国山地に、冬の季節風は中国山地にさえぎられるから。",tip:"2つの山地にはさまれている＝雨が少ない。ため池が多い理由にもなる。",hint:"北と南にある山地に注目しよう。"},
+{id:"H04",s:"soc",u:"中部地方",c:["ぶどう・もも","米","茶","みかん"],q:["甲府盆地の扇状地でさかんに栽培されている作物は？","山梨県の甲府盆地で多くつくられているくだものは？","水はけのよい扇状地を利用した、甲府盆地の果樹栽培は？"],why:"扇状地は水はけがよく果樹に向いている。甲府盆地はぶどう・ももの産地。",tip:"扇状地＝水はけがよい＝果樹園。",hint:"くだものの組み合わせだよ。"},
+{id:"H05",s:"soc",u:"関東地方",c:["京浜工業地帯","中京工業地帯","阪神工業地帯","北九州工業地帯"],q:["東京から神奈川県の臨海部に広がる工業地帯は？","横浜や川崎の海沿いにある工業地帯の名前は？","東京・川崎・横浜にまたがる工業地帯を選ぼう。"],why:"京浜工業地帯は東京・神奈川の臨海部に広がる。「京」は東京、「浜」は横浜。",tip:"京浜＝東京＋横浜、中京＝名古屋中心、阪神＝大阪＋神戸。",hint:"名前に「浜」が入るよ。"},
+{id:"H06",s:"soc",u:"鎌倉時代",c:["六波羅探題","京都所司代","大宰府","鎌倉府"],q:["承久の乱のあと、鎌倉幕府が朝廷を見張るため京都に置いたのは？","承久の乱後に京都に置かれた、鎌倉幕府の機関は？","朝廷の監視と西日本の御家人の統制のために置かれたものは？"],why:"承久の乱（1221年）のあと、幕府は京都に六波羅探題を置いて朝廷を見張った。",tip:"京都所司代は江戸時代。時代をまちがえないでね。",hint:"鎌倉時代に京都の「六波羅」に置かれたよ。"},
+{id:"H07",s:"soc",u:"室町時代",tg:"テストによく出る",c:["勘合貿易","南蛮貿易","朱印船貿易","日宋貿易"],q:["足利義満が始めた、明との貿易を何という？","倭寇と区別するため合い札を使った明との貿易は？","室町時代、勘合という証明書を使って行った貿易は？"],why:"正式な貿易船であることを証明するため、勘合という合い札を使った。",tip:"日宋＝平清盛、勘合＝足利義満、朱印船＝江戸初期。",hint:"合い札の名前がそのまま貿易の名前だよ。"},
+{id:"H08",s:"soc",u:"戦国時代",c:["種子島","長崎","平戸","堺"],q:["1543年、ポルトガル人が鉄砲を伝えた場所は？","鉄砲が日本に伝わった島は？","1543年に鉄砲が伝来した場所を選ぼう。"],why:"1543年、種子島（鹿児島県）に流れ着いたポルトガル人が鉄砲を伝えた。",tip:"「以後よさん（1543）ざん 鉄砲伝来」。",hint:"鹿児島県にある島だよ。"},
+{id:"H09",s:"soc",u:"安土桃山時代",c:["刀狩","太閤検地","楽市・楽座","参勤交代"],q:["豊臣秀吉が、百姓から刀や鉄砲を取り上げた政策は？","一揆を防ぐため、百姓の武器を取り上げた政策を何という？","兵農分離を進めた、豊臣秀吉の武器回収の政策は？"],why:"刀狩で百姓は武器を持てなくなり、武士と百姓の身分の区別（兵農分離）が進んだ。",tip:"太閤検地＝土地の調査、刀狩＝武器の取り上げ。",hint:"名前に「刀」が入るよ。"},
+{id:"H10",s:"soc",u:"江戸時代",c:["出島","種子島","対馬","平戸"],q:["鎖国の時代、オランダと貿易をした長崎の人工の島は？","江戸時代、オランダ商館が置かれた長崎の島は？","長崎につくられた扇形の人工島を選ぼう。"],why:"鎖国中もオランダとは長崎の出島で貿易を続けた。",tip:"長崎＝出島（オランダ）と唐人屋敷（中国）。",hint:"扇の形をした人工の島だよ。"}
+];
+
+// ===== 教科の中のカテゴリ =====
+const CATS={
+  koku:[["漢字",["K01","K02","K03","K04"]],["文法（活用）",["K05","K06","K07"]],["敬語・語句",["K08","K09","K10"]]],
+  math:[["式の計算",["M01","M02","M03","M04","M05"]],["連立方程式",["M06","M07","M08"]],["1次関数",["M09","M10"]]],
+  eng:[["過去進行形・未来",["E01","E02","E03"]],["接続詞",["E04","E05","E09"]],["不定詞",["E06","E07"]],["文のかたち・単語",["E08","E10"]]],
+  sci:[["化学",["S01","S02","S03","S04","S05","S06"]],["生物",["S07","S08","S09","S10"]]],
+  soc:[["地理（日本の地域）",["H01","H02","H03","H04","H05"]],["歴史（中世）",["H06","H07"]],["歴史（近世）",["H08","H09","H10"]]]
+};
+// ===== 計算問題：式を書いてから答えを見る（式の例） =====
+const STEPS={
+  M01:"3a ＋ 2b − (a − 4b)\n＝ 3a ＋ 2b − a ＋ 4b\n＝ 2a ＋ 6b",
+  M02:"6a²b ÷ 3ab\n＝ 6a²b / 3ab\n＝ 2a",
+  M03:"(−2x)² × 3x\n＝ 4x² × 3x\n＝ 12x³",
+  M04:"2x ＋ y ＝ 7\ny ＝ 7 − 2x",
+  M05:"2(a＋b) − (a−3b)\n＝ 2a ＋ 2b − a ＋ 3b\n＝ a ＋ 5b\n＝ 3 ＋ 5×(−2)\n＝ −7",
+  M06:"x ＋ y ＝ 7\nx − y ＝ 1\nたすと 2x ＝ 8 → x ＝ 4\n4 ＋ y ＝ 7 → y ＝ 3",
+  M07:"3x ＋ 2x ＝ 15（y＝2x を代入）\n5x ＝ 15 → x ＝ 3\ny ＝ 2 × 3 ＝ 6",
+  M08:"あめ x 個、ガム y 個\nx ＋ y ＝ 10\n50x ＋ 80y ＝ 620\n50x ＋ 80(10 − x) ＝ 620\n−30x ＝ −180 → x ＝ 6\ny ＝ 4",
+  M09:"y ＝ ax ＋ b とくらべる\na ＝ 2（傾き）\nb ＝ −3（切片）",
+  M10:"傾き ＝ (7 − 3) ÷ (3 − 1) ＝ 2\ny ＝ 2x ＋ b に (1, 3) を代入\n3 ＝ 2 ＋ b → b ＝ 1\ny ＝ 2x ＋ 1",
+  S06:"酸素 ＝ 酸化銅 − 銅\n1.0 − 0.8 ＝ 0.2g"
+};
+const ansText=q=>q.t==="in"?q.a+(q.unit?" "+q.unit:""):q.c[0];
+const catOf=id=>{for(const s in CATS)for(const [n,ids] of CATS[s])if(ids.includes(id))return n;return ""};
+const catIds=(s,c)=>c?(CATS[s].find(x=>x[0]===c)||[0,[]])[1]:Q.filter(q=>q.s===s).map(q=>q.id);
+
+// ===== 絵で覚えよう（オリジナルSVG） pre:1 は問題といっしょに出す（答えがわからない絵だけ） =====
+const L='stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"';
+const F=c=>`fill="var(--${c})"`;
+const T=(x,y,t,s=13,a="middle")=>`<text x="${x}" y="${y}" text-anchor="${a}" fill="var(--ink)" style="font:800 ${s}px 'M PLUS Rounded 1c',sans-serif">${t}</text>`;
+const KAN='<rect x="-6" y="-22" width="12" height="11" rx="2" fill="var(--ink)"/>';
+const KABUTO=`<path d="M-15 -3q15 -24 30 0z" ${F("fSoc")} ${L}/><path d="M0 -14l-6 -10M0 -14l6 -10" ${L}/>`;
+const H=(x,y,c="lavL",s=1,hat="")=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-12" y="11" width="24" height="24" rx="10" ${F(c)} ${L}/><circle r="12" ${F("card")} ${L}/>${hat}<circle cx="-4" cy="1" r="1.8" fill="var(--ink)"/><circle cx="4" cy="1" r="1.8" fill="var(--ink)"/><ellipse cx="-7" cy="5" rx="2.6" ry="1.6" fill="var(--pink)" opacity=".5"/><ellipse cx="7" cy="5" rx="2.6" ry="1.6" fill="var(--pink)" opacity=".5"/></g>`;
+const BIRD=(x,y)=>`<g transform="translate(${x} ${y})"><ellipse rx="13" ry="8" ${F("fEng")} ${L}/><path d="M11 -3l9 3-9 3" ${F("fSoc")} ${L}/><circle cx="6" cy="-2" r="1.6" fill="var(--ink)"/><path d="M-4 -5q-6 -14 -16 -6" fill="none" ${L}/></g>`;
+const PL=(f,x0,x1,ox,oy,sx,sy)=>{const p=[];for(let i=0;i<=40;i++){const x=x0+(x1-x0)*i/40;p.push((ox+x*sx).toFixed(1)+","+(oy-f(x)*sy).toFixed(1))}return `<polyline points="${p.join(" ")}" fill="none" stroke="var(--pink)" stroke-width="3"/>`};
+const AX=(ox,oy)=>`<path d="M14 ${oy}H190M${ox} 114V6" fill="none" stroke="var(--sub)" stroke-width="2"/>`;
+const DOT=(x,y,c="lav")=>`<circle cx="${x}" cy="${y}" r="5" ${F(c)} ${L}/>`;
+const DIE=(x,y,pips)=>`<g transform="translate(${x} ${y})"><rect x="-26" y="-26" width="52" height="52" rx="12" ${F("card")} ${L}/>${pips.map(([a,b])=>`<circle cx="${a}" cy="${b}" r="5" fill="${a===0&&b===0&&pips.length===1?"var(--ng)":"var(--ink)"}"/>`).join("")}</g>`;
+const SP=(x,y,s=1)=>`<path transform="translate(${x} ${y}) scale(${s})" d="M0 -10l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="var(--fSoc)" stroke="var(--ink)" stroke-width="1.5"/>`;
+const BOX=(x,y,w,t,c="lavL",fs=13)=>`<rect x="${x}" y="${y}" width="${w}" height="30" rx="8" ${F(c)} ${L}/>${T(x+w/2,y+20,t,fs)}`;
+const BAL=(l,r)=>`<path d="M100 30V104M70 108h60" fill="none" ${L}/><path d="M30 40H170" ${L}/><path d="M30 40l-16 34h32zM170 40l-16 34h32z" fill="none" ${L}/>${BOX(4,76,52,l,"lavL",12)}${BOX(144,76,52,r,"pinkL",12)}<circle cx="100" cy="30" r="5" ${F("fSoc")} ${L}/>`;
+const CAT=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-14 -6l2 -14 9 8zM14 -6l-2 -14 -9 8z" ${F("fSoc")} ${L}/><circle r="15" ${F("fSoc")} ${L}/><circle cx="-5" cy="-2" r="1.8" fill="var(--ink)"/><circle cx="5" cy="-2" r="1.8" fill="var(--ink)"/><path d="M-3 5q3 3 6 0" fill="none" stroke="var(--ink)" stroke-width="1.6"/></g>`;
+const ARW=(x1,y,x2)=>`<path d="M${x1} ${y}H${x2}M${x2-8} ${y-7}l8 7-8 7" fill="none" ${L}/>`;
+const MT=(x,w,h,c="okL")=>`<path d="M${x} 108l${w/2} ${-h}l${w/2} ${h}z" ${F(c)} ${L}/>`;
+const PIC={
+K01:{pre:1,cap:"むずかしいことに立ち向かう",d:`${MT(40,140,92)}<path d="M110 16v-12l16 6-16 6" ${F("pinkL")} ${L}/>${H(78,66,"pinkL",.8)}<path d="M92 56l14 -24" stroke="var(--sub)" stroke-width="2" stroke-dasharray="4 4"/>`},
+K02:{pre:1,cap:"いろいろ重なってこみいっている",d:`<path d="M30 60c20 -50 40 50 60 0s30 -40 20 10s-50 30 -30 -20s70 -30 60 20s-40 40 -30 0s40 -30 60 -10" fill="none" stroke="var(--pink)" stroke-width="3" stroke-linecap="round"/>`},
+K03:{pre:1,cap:"しずかで落ち着いている",d:`<circle cx="150" cy="34" r="18" ${F("fSoc")} ${L}/><path d="M10 80q22 -6 45 0t45 0t45 0t45 0V116H10z" ${F("fEng")} fill-opacity=".45" ${L}/>`},
+K04:{pre:1,cap:"急いで落ち着かない",d:`${H(80,52,"pinkL",1.4)}<path d="M108 30q4 8 0 12q-4 -4 0 -12zM116 44q4 8 0 12q-4 -4 0 -12z" ${F("fEng")} stroke="var(--ink)" stroke-width="1.5"/><circle cx="160" cy="52" r="24" ${F("card")} ${L}/><path d="M160 52V36M160 52l12 6" ${L}/>`},
+K05:{cap:"「ない」をつけてア段→五段活用",d:`${BOX(40,30,60,"書か","lavL")}${BOX(104,30,56,"ない","pinkL")}${T(70,90,"「か」＝ア段",13)}`},
+K06:{cap:"「ない」をつけてイ段→上一段活用",d:`${BOX(40,30,60,"起き","lavL")}${BOX(104,30,56,"ない","pinkL")}${T(70,90,"「き」＝イ段",13)}`},
+K07:{cap:"「ば」に続く形＝仮定形",d:`${BOX(44,40,60,"走れ","lavL")}${BOX(108,40,48,"ば","pinkL")}`},
+K08:{cap:"自分が行く→へりくだって「伺う」",d:`<path d="M120 60L156 30L192 60V106H120z" ${F("lavL")} ${L}/><rect x="146" y="78" width="20" height="28" ${F("card")} ${L}/><g transform="rotate(20 60 60)">${H(60,52,"pinkL",1.3)}</g>`},
+K09:{cap:"先生の動作を高める＝尊敬語",d:`${H(60,56,"lavL",1.5,KAN)}<path d="M98 26h90v40h-60l-14 12v-12h-16z" ${F("card")} ${L}/>${T(143,52,"おっしゃる",12)}`},
+K10:{cap:"反対の意味の字の組み合わせ",d:`${BOX(24,24,40,"強","pinkL")}${T(82,44,"⇔",16)}${BOX(100,24,40,"弱","lavL")}${BOX(24,72,40,"上","pinkL")}${T(82,92,"⇔",16)}${BOX(100,72,40,"下","lavL")}`},
+M01:{cap:"かっこの前の−は、中の符号を全部変える",d:`${BOX(20,20,160,"−(a − 4b)","lavL")}<path d="M100 54v14M92 62l8 8 8-8" fill="none" ${L}/>${BOX(20,76,160,"−a ＋ 4b","pinkL")}`},
+M02:{cap:"分数にして約分",d:`<path d="M50 60H150" ${L}/>${T(100,48,"6a²b",18)}${T(100,88,"3ab",18)}`},
+M03:{pre:1,cap:"2乗は、かっこの中を2回かける",d:`${BOX(8,46,58,"(−2x)","lavL")}${T(72,66,"×",14)}${BOX(78,46,58,"(−2x)","lavL")}${T(142,66,"×",14)}${BOX(148,46,44,"3x","pinkL")}`},
+M04:{cap:"y 以外を右辺へ移項",d:BAL("2x＋y","7")},
+M05:{cap:"先に式を整理してから代入",d:`${BOX(40,16,120,"a ＋ 5b","lavL")}${BOX(20,70,70,"a＝3","pinkL")}${BOX(110,70,70,"b＝−2","pinkL")}`},
+M06:{cap:"2つの式をたすと y が消える",d:`${BOX(50,10,100,"x ＋ y ＝ 7","lavL")}${BOX(50,46,100,"x − y ＝ 1","lavL")}<path d="M40 80H160" ${L}/>${T(26,62,"＋",16)}${BOX(50,86,100,"2x ＝ 8","pinkL")}`},
+M07:{cap:"y のところに 2x を代入",d:`${BOX(30,16,140,"3x ＋ y ＝ 15","lavL")}<path d="M108 50v14M100 58l8 8 8-8" fill="none" ${L}/>${BOX(30,76,140,"3x ＋ 2x ＝ 15","pinkL")}`},
+M08:{pre:1,cap:"あめとガム、合わせて10個で620円",d:`${[30,58].map(x=>`<g transform="translate(${x} 44)"><ellipse rx="12" ry="9" ${F("pinkL")} ${L}/><path d="M-12 0l-8 -6v12zM12 0l8 -6v12z" ${F("pinkL")} ${L}/></g>`).join("")}${T(44,80,"50円",12)}${[118,148].map(x=>`<rect x="${x}" y="34" width="22" height="22" rx="4" ${F("fEng")} ${L}/>`).join("")}${T(144,80,"80円",12)}${T(100,108,"10個で620円",13)}`},
+M09:{cap:"y＝ax＋b の a が傾き、b が切片",d:`${AX(80,70)}${PL(x=>2*x-3,-1,3.2,80,70,22,10)}${DOT(80,100,"lav")}${T(98,108,"−3",11,"start")}`},
+M10:{pre:1,cap:"2点を通る直線",d:`${AX(40,110)}${DOT(70,74,"lav")}${DOT(130,26,"lav")}${T(78,90,"(1, 3)",11,"start")}${T(138,42,"(3, 7)",11,"start")}`},
+E01:{pre:1,cap:"watching TV then",d:`<rect x="104" y="24" width="80" height="58" rx="6" ${F("fEng")} fill-opacity=".45" ${L}/><path d="M130 82l-8 16M158 82l8 16" ${L}/>${H(56,58,"pinkL",1.3)}`},
+E02:{pre:1,cap:"visit Kyoto next week",d:`<path d="M60 34h80M66 46h68" stroke="var(--ng)" stroke-width="6" stroke-linecap="round"/><path d="M76 46v62M124 46v62" stroke="var(--ng)" stroke-width="6" stroke-linecap="round"/><rect x="146" y="72" width="44" height="40" rx="6" ${F("card")} ${L}/><rect x="146" y="72" width="44" height="12" ${F("lavL")} ${L}/>${T(168,104,"next",10)}`},
+E03:{pre:1,cap:"rain tomorrow",d:`<path d="M60 60a20 20 0 0 1 10 -36a26 26 0 0 1 48 -4a20 20 0 0 1 22 40z" ${F("card")} ${L}/>${[70,92,114,136].map(x=>`<path d="M${x} 74l-6 16M${x+10} 82l-6 16" stroke="var(--fEng)" stroke-width="3" stroke-linecap="round"/>`).join("")}`},
+E04:{pre:1,cap:"家に着いたとき、母は料理中",d:`<path d="M20 64L60 30L100 64V108H20z" ${F("pinkL")} ${L}/><rect x="50" y="80" width="20" height="28" ${F("card")} ${L}/><path d="M124 70h56v24a10 10 0 0 1 -10 10h-36a10 10 0 0 1 -10 -10z" ${F("gray")} ${L}/><path d="M140 60q-4 -8 0 -16M156 60q-4 -8 0 -16" fill="none" stroke="var(--sub)" stroke-width="2"/>`},
+E05:{pre:1,cap:"家にいた。具合が悪かったから",d:`<rect x="30" y="64" width="140" height="30" rx="8" ${F("lavL")} ${L}/><path d="M30 94v14M170 94v14" ${L}/>${H(60,58,"pinkL",1)}<rect x="74" y="56" width="84" height="16" rx="6" ${F("card")} ${L}/><path d="M78 40q4 -6 0 -12" fill="none" stroke="var(--ng)" stroke-width="2"/>`},
+E06:{pre:1,cap:"be a doctor",d:`${H(100,46,"card",1.6)}<path d="M84 72q16 22 32 0" fill="none" ${L}/><circle cx="100" cy="94" r="5" ${F("lavL")} ${L}/><path d="M128 74h14M135 67v14" stroke="var(--ng)" stroke-width="4" stroke-linecap="round"/>`},
+E07:{pre:1,cap:"勉強するために図書館へ",d:`<rect x="20" y="20" width="80" height="88" rx="6" ${F("card")} ${L}/><path d="M20 50h80M20 80h80" ${L}/>${[0,1].map(r=>[0,1,2,3].map(i=>`<rect x="${26+i*18}" y="${26+r*30}" width="12" height="22" rx="2" ${F(["lavL","pinkL","okL"][(i+r)%3])} stroke="var(--ink)" stroke-width="1.5"/>`).join("")).join("")}${H(150,58,"pinkL",1.2)}`},
+E08:{pre:1,cap:"two cats under the table",d:`<rect x="20" y="24" width="160" height="12" rx="4" ${F("fSoc")} ${L}/><path d="M34 36V112M166 36V112" stroke="var(--ink)" stroke-width="5"/>${CAT(78,88)}${CAT(124,88)}`},
+E09:{pre:1,cap:"I think … he is kind.",d:`${H(52,62,"pinkL",1.3)}<circle cx="92" cy="34" r="4" ${F("card")} ${L}/><ellipse cx="146" cy="44" rx="44" ry="30" ${F("card")} ${L}/>${H(146,34,"lavL",.8)}`},
+E10:{cap:"go - went - gone",d:`${BOX(20,46,44,"go","lavL")}${ARW(70,61,92)}${BOX(98,46,44,"went","pinkL")}${T(170,66,"gone",13)}`},
+S01:{pre:1,cap:"石灰水が白くにごった",d:`<g transform="rotate(-15 60 60)"><rect x="34" y="40" width="70" height="20" rx="10" ${F("card")} ${L}/></g><path d="M50 108l14 -30l14 30z" ${F("fSoc")} ${L}/><path d="M64 78q-6 -10 0 -20q6 10 0 20z" ${F("ng")}/><path d="M98 40q30 0 40 30" fill="none" ${L}/><path d="M128 60v44a8 8 0 0 0 16 0V60" ${F("gray")} ${L}/>`},
+S02:{cap:"陰極に水素、陽極に酸素（2：1）",d:`<rect x="40" y="16" width="30" height="86" rx="6" ${F("card")} ${L}/><rect x="40" y="16" width="30" height="40" ${F("lavL")}/><rect x="130" y="16" width="30" height="86" rx="6" ${F("card")} ${L}/><rect x="130" y="16" width="30" height="20" ${F("pinkL")}/>${T(55,116,"陰極 −",11)}${T(145,116,"陽極 ＋",11)}`},
+S03:{cap:"水素原子2個と酸素原子1個",d:`<circle cx="100" cy="62" r="28" ${F("pinkL")} ${L}/>${T(100,68,"O",16)}<circle cx="58" cy="88" r="18" ${F("card")} ${L}/>${T(58,94,"H",14)}<circle cx="142" cy="88" r="18" ${F("card")} ${L}/>${T(142,94,"H",14)}`},
+S04:{cap:"鉄＋硫黄→硫化鉄",d:`${BOX(10,46,40,"Fe","gray")}${T(60,66,"＋",14)}${BOX(70,46,40,"S","fSoc")}${ARW(116,61,140)}${BOX(146,46,48,"FeS","lavL")}`},
+S05:{cap:"酸素がうばわれる＝還元",d:`${BOX(6,20,60,"CuO","lavL")}${T(76,40,"＋",14)}${BOX(86,20,30,"C","gray")}${ARW(122,35,142)}${BOX(148,20,46,"Cu","pinkL")}<path d="M36 54q40 40 80 0" fill="none" stroke="var(--pink)" stroke-width="2.5" stroke-dasharray="5 4"/>${T(76,100,"O をうばう",12)}`},
+S06:{pre:1,cap:"銅0.8g → 酸化銅1.0g",d:`${BOX(14,46,64,"0.8g","pinkL")}${ARW(86,61,114)}${BOX(122,46,64,"1.0g","lavL")}${T(46,96,"銅",12)}${T(154,96,"酸化銅",12)}`},
+S07:{cap:"植物細胞だけ：細胞壁・葉緑体・液胞",d:`<rect x="20" y="20" width="76" height="84" rx="6" ${F("okL")} stroke="var(--ink)" stroke-width="5"/><circle cx="58" cy="56" r="10" ${F("lavL")} ${L}/>${[[36,34],[78,40],[40,88],[80,86]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="5" ${F("fSci")} stroke="var(--ink)" stroke-width="1.2"/>`).join("")}<circle cx="148" cy="62" r="40" ${F("pinkL")} ${L}/><circle cx="148" cy="62" r="10" ${F("lavL")} ${L}/>${T(58,118,"植物",11)}${T(148,118,"動物",11)}`},
+S08:{cap:"光合成でデンプンと酸素ができる",d:`<circle cx="30" cy="26" r="14" ${F("fSoc")} ${L}/><path d="M70 108C40 60 80 30 110 20C140 50 130 90 70 108z" ${F("fSci")} ${L}/>${T(160,40,"O₂ ↑",13)}${T(160,92,"CO₂ →",12)}`},
+S09:{cap:"気孔から水蒸気が出る＝蒸散",d:`<path d="M40 100C20 60 60 20 140 20C160 60 120 100 40 100z" ${F("fSci")} ${L}/><ellipse cx="96" cy="60" rx="10" ry="6" ${F("card")} ${L}/><path d="M96 54v0" ${L}/>${[90,100,110].map(x=>`<path d="M${x} 46q-6 -8 0 -16q6 -8 0 -16" fill="none" stroke="var(--fEng)" stroke-width="2"/>`).join("")}`},
+S10:{cap:"体が1つの細胞＝単細胞生物",d:`<ellipse cx="100" cy="62" rx="66" ry="30" ${F("okL")} ${L}/>${Array.from({length:22},(_,i)=>{const a=i/22*Math.PI*2;return `<path d="M${(100+Math.cos(a)*66).toFixed(1)} ${(62+Math.sin(a)*30).toFixed(1)}l${(Math.cos(a)*8).toFixed(1)} ${(Math.sin(a)*8).toFixed(1)}" stroke="var(--ink)" stroke-width="1.5"/>`}).join("")}<circle cx="96" cy="62" r="10" ${F("lavL")} ${L}/>`},
+H01:{cap:"北西の季節風が日本海で水分をふくむ",d:`<rect x="10" y="70" width="80" height="40" ${F("fEng")} fill-opacity=".4"/>${T(50,96,"日本海",11)}${MT(100,90,70,"card")}<path d="M10 30l70 30" fill="none" ${L}/><path d="M72 50l10 10-14 2" fill="none" ${L}/>${[120,140,160].map(x=>`<path d="M${x} 22v12M${x-6} 28h12" stroke="var(--fEng)" stroke-width="2.5"/>`).join("")}`},
+H02:{cap:"火山の噴出物でできたシラス台地",d:`${MT(30,90,70,"gray")}<path d="M66 38q9 -20 18 0" fill="none" stroke="var(--sub)" stroke-width="2"/><rect x="110" y="70" width="80" height="38" ${F("card")} ${L}/><path d="M110 82h80M110 94h80" stroke="var(--sub)" stroke-width="1.5" stroke-dasharray="3 3"/>${T(150,62,"シラス",12)}`},
+H03:{cap:"2つの山地が季節風をさえぎる",d:`${MT(10,60,60)}${MT(130,60,60)}<rect x="70" y="92" width="60" height="16" ${F("fEng")} fill-opacity=".45"/><circle cx="100" cy="60" r="12" ${F("fSoc")} ${L}/>${T(40,116,"中国山地",10)}${T(160,116,"四国山地",10)}`},
+H04:{cap:"扇状地でぶどう・もも",d:`<path d="M100 20L30 106H170z" ${F("okL")} ${L}/>${[[80,80],[88,88],[96,80],[88,72],[80,92]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" ${F("fMath")} stroke="var(--ink)" stroke-width="1.5"/>`).join("")}<circle cx="128" cy="86" r="11" ${F("pinkL")} ${L}/>`},
+H05:{cap:"東京・川崎・横浜の臨海部",d:`<rect x="10" y="88" width="180" height="24" ${F("fEng")} fill-opacity=".45"/>${[30,80,130].map(x=>`<path d="M${x} 88V50l14 10V50l14 10V40h10v48z" ${F("gray")} ${L}/>`).join("")}${T(100,30,"京浜",14)}`},
+H06:{cap:"京都に六波羅探題を置いた",d:`<rect x="30" y="40" width="60" height="50" ${F("lavL")} ${L}/><path d="M24 40L60 18L96 40z" ${F("pinkL")} ${L}/>${T(60,108,"京都",11)}${H(150,60,"okL",1.2,KABUTO)}${T(150,108,"幕府",11)}<path d="M120 50h-22" stroke="var(--sub)" stroke-width="2" stroke-dasharray="4 4"/>`},
+H07:{cap:"合い札（勘合）で正式な船と証明",d:`<path d="M30 80h90l-12 22H42z" ${F("fSoc")} ${L}/><path d="M74 80V24" ${L}/><path d="M74 28l30 24h-30z" ${F("card")} ${L}/><rect x="140" y="30" width="20" height="56" ${F("card")} ${L}/><rect x="164" y="30" width="20" height="56" ${F("card")} ${L}/>${T(162,64,"勘合",11)}`},
+H08:{cap:"1543年、種子島に鉄砲伝来",d:`<ellipse cx="70" cy="80" rx="50" ry="22" ${F("okL")} ${L}/><path d="M110 40l70 -16" stroke="var(--ink)" stroke-width="7" stroke-linecap="round"/><path d="M118 40l-12 14" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>${T(150,70,"1543",14)}`},
+H09:{cap:"百姓から刀を取り上げる＝刀狩",d:`${H(54,58,"okL",1.3)}<path d="M100 40l70 40" stroke="var(--gray)" stroke-width="6" stroke-linecap="round"/><path d="M96 38l10 6" stroke="var(--ink)" stroke-width="8" stroke-linecap="round"/><path d="M120 40l40 40M160 40l-40 40" stroke="var(--ng)" stroke-width="4" stroke-linecap="round"/>`},
+H10:{cap:"長崎の扇形の人工島＝出島",d:`<rect x="10" y="70" width="180" height="44" ${F("fEng")} fill-opacity=".35"/><path d="M50 70Q100 30 150 70L130 90Q100 70 70 90z" ${F("fSoc")} ${L}/><path d="M100 54v-20l14 6-14 6" ${F("card")} ${L}/>`}
+};
+
+const picSVG=id=>PIC[id]?`<svg viewBox="0 0 200 122" role="img" aria-label="${esc(PIC[id].cap)}">${PIC[id].d}</svg>`:"";
+
+const KEY="yume5_c2_v1";
+let S={nick:"",sound:true,p:{},last:{}};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const P=id=>S.p[id]||(S.p[id]={st:0,g:false,w:false,seen:0});
+const app=document.getElementById("app");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---- 音 ----
+let AC=null;
+function tone(f,t0,d,v){const o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0,AC.currentTime+t0);g.gain.linearRampToValueAtTime(v,AC.currentTime+t0+.01);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+t0+d);o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+t0);o.stop(AC.currentTime+t0+d+.05)}
+function snd(kind){if(!S.sound)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  if(kind==="ok"){tone(1318,0,.12,.15);tone(1760,.09,.25,.15)}
+  else if(kind==="grad"){[1047,1319,1568,2093,2637].forEach((f,i)=>tone(f,i*.09,.3,.12))}}catch(e){}}
+
+// ---- オリジナルちびキャラ ----
+function mascot(prop,size=64){
+  // 教科ごとに色ちがいのスマイル
+  const col={brush:"--fKoku",ruler:"--fMath",abc:"--fEng",flask:"--fSci",globe:"--fSoc"}[prop]||"--fKoku";
+  return `<svg width="${size}" height="${size}" viewBox="0 0 66 66" aria-hidden="true">
+  <circle cx="33" cy="34" r="27" fill="var(${col})" stroke="var(--faceInk)" stroke-width="2.5"/>
+  <ellipse cx="23" cy="29" rx="3" ry="4" fill="var(--faceInk)"/><ellipse cx="43" cy="29" rx="3" ry="4" fill="var(--faceInk)"/>
+  <ellipse cx="16" cy="40" rx="5" ry="3" fill="#fff" opacity=".45"/><ellipse cx="50" cy="40" rx="5" ry="3" fill="#fff" opacity=".45"/>
+  <path d="M20 41q13 14 26 0" stroke="var(--faceInk)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,1800)}
+function copy(text,el){
+  const done=()=>toast("コピーしたよ！");
+  try{navigator.clipboard.writeText(text).then(done,()=>sel(el))}catch(e){sel(el)}
+  function sel(e){if(!e)return;const r=document.createRange();r.selectNodeContents(e);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("選んだ文字をコピーしてね")}
+}
+function daysLeft(){const t=new Date(2027,1,16);const n=new Date();n.setHours(0,0,0,0);return Math.max(0,Math.round((t-n)/864e5))}
+
+function topbar(back){
+  return `<div class="top">${back?`<button class="btn small" id="back">← もどる</button>`:`<h1>5教科ノート</h1>`}
+  <button class="btn small" id="sndBtn" aria-pressed="${S.sound}">音 ${S.sound?"ON":"OFF"}</button></div>`;
+}
+function bindTop(){
+  document.body.classList.remove("typing");
+  document.getElementById("sndBtn").onclick=()=>{S.sound=!S.sound;save();const b=document.getElementById("sndBtn");b.textContent="音 "+(S.sound?"ON":"OFF");b.setAttribute("aria-pressed",S.sound)};
+  const b=document.getElementById("back");if(b)b.onclick=home;
+}
+
+// ---- ホーム ----
+function home(){
+  const cards=Object.entries(SUBJ).map(([k,v])=>{
+    const qs=Q.filter(q=>q.s===k),g=qs.filter(q=>P(q.id).g).length;
+    return `<button class="btn subj" data-s="${k}">${mascot(v.prop,44)}<span class="nm">${v.nm}</span></button>`}).join("");
+  app.innerHTML=`${topbar(false)}
+  <div class="card">
+    <div class="count"><span>受験本番まで あと約</span><b>${monthsLeft()}</b><span>か月</span></div>
+    ${(()=>{const i=nowIdx();return i>=0?`<div><span class="pill pk">いま</span>　${SCHED[i].ttl}：${SCHED[i].d}</div>`:""})()}
+    <button class="btn lav" id="sched">受験までのスケジュールを見る</button>
+  </div>
+  <div class="sub">問題は横浜市の中学校の教科書の順番に合わせた、中2・10月ごろまでの範囲のオリジナルだよ。テスト範囲は先生に確認してね。</div>
+  <div class="card">
+    <label for="nick">ニックネーム（本名は書かないでね）</label>
+    <input type="text" id="nick" maxlength="10" placeholder="例：もちこ" value="${esc(S.nick)}">
+  </div>
+  <h2>どの教科やる？</h2>
+  <div class="subjects">${cards}</div>
+  <div class="card">
+    <h3>教え合いモード</h3>
+    <div class="sub">友達から届いた問題番号（例：M02 H05）を入れると、答えと理由が見られるよ。</div>
+    <button class="btn lav" id="teach">番号を入れて教えてもらう</button>
+  </div>
+  <div class="memo">1回5問・休み時間で終わる量。どの問題も<b>2回つづけて正解</b>で卒業！ まちがえた問題は少しあとと次の回にまた出るよ。</div>`;
+  bindTop();
+  document.getElementById("nick").oninput=e=>{S.nick=e.target.value.slice(0,10);save()};
+  app.querySelectorAll(".subj").forEach(b=>b.onclick=()=>cats(b.dataset.s));
+  document.getElementById("teach").onclick=()=>teach("");
+  document.getElementById("sched").onclick=sched;
+}
+
+// ---- カテゴリをえらぶ ----
+function cats(s){
+  const all=Q.filter(q=>q.s===s).length;
+  const list=[["",all]].concat(CATS[s].map(([n,ids])=>[n,ids.length]));
+  app.innerHTML=`${topbar(true)}
+  <div class="card"><div class="qhead">${mascot(SUBJ[s].prop,56)}<h2>${SUBJ[s].nm}　どこをやる？</h2></div></div>
+  <div class="choices">${list.map(([n,c])=>`<button class="btn cat" data-c="${esc(n)}">${n?esc(n):"ぜんぶまぜる"}<span class="sub">　${c}問</span></button>`).join("")}</div>`;
+  bindTop();
+  app.querySelectorAll(".cat").forEach(b=>b.onclick=()=>start(s,b.dataset.c));
+}
+
+// ---- 出題 ----
+let R=null;
+function start(s,cat=""){
+  const ids=catIds(s,cat);
+  const pool=Q.filter(q=>ids.includes(q.id)&&!P(q.id).g);
+  if(!pool.length){allDone(s,cat);return}
+  const ord=shuf(pool).sort((a,b)=>(P(b.id).w-P(a.id).w)||(P(a.id).seen-P(b.id).seen));
+  R={s,cat,queue:ord.slice(0,5).map(q=>q.id),i:0,log:[],first:{},retried:new Set(),hint:false,grads:[]};
+  ask();
+}
+function ask(){
+  const id=R.queue[R.i],q=Q.find(x=>x.id===id),p=P(id);R.hint=false;
+  const film=R.queue.map((_,k)=>`<span class="${k<R.log.length?(R.log[k]?"ok":""):(k===R.i?"now":"")}">${k<R.log.length?(R.log[k]?"♡":"・"):""}</span>`).join("");
+  const body=STEPS[id]
+    ?`<label for="shiki">式を書いてね（答えまで書こう）</label><textarea id="shiki" rows="4" placeholder="例：6 ÷ 2 ＝ …"></textarea><button class="btn main" id="reveal">答えを見る</button><div id="rv"></div>`
+    :q.t==="in"
+    ?`<input type="text" id="ans" autocomplete="off" placeholder="ここに書こう"><button class="btn main" id="go">こたえる</button>`
+    :`<div class="choices">${shuf(q.c).map(c=>`<button class="btn ch">${esc(c)}</button>`).join("")}</div>`;
+  app.innerHTML=`${topbar(true)}
+  <div class="film" aria-label="きょうのログ">${film}</div>
+  <div class="card pop" id="qc">
+    <div class="row" style="gap:6px"><span class="pill">${SUBJ[q.s].nm}・${esc(catOf(q.id))}</span><span class="pill">${esc(q.u)}</span>${q.tg?`<span class="pill pk">${q.tg}</span>`:""}</div>
+    <div class="qhead">${mascot(SUBJ[q.s].prop)}<div class="qtext">${esc(pick(q.q))}</div></div>
+    ${PIC[id]&&PIC[id].pre?`<div class="pic pre">${picSVG(id)}</div>`:""}
+    ${body}
+    <button class="btn small" id="hintBtn">ヒントを見る</button>
+    <div class="memo" id="hint" hidden></div>
+  </div><div id="fb"></div>`;
+  bindTop();
+  document.body.classList.remove("typing");
+  app.querySelectorAll("#ans,#shiki").forEach(el=>{
+    el.addEventListener("focus",()=>{document.body.classList.add("typing");setTimeout(()=>{const t=document.querySelector("#qc");t&&t.scrollIntoView({block:"start",behavior:reduce?"auto":"smooth"})},350)});
+    el.addEventListener("blur",()=>setTimeout(()=>{const ae=document.activeElement;if(!ae||(ae.id!=="ans"&&ae.id!=="shiki"))document.body.classList.remove("typing")},300));
+  });
+  document.getElementById("hintBtn").onclick=()=>{R.hint=true;const h=document.getElementById("hint");h.hidden=false;h.textContent="ヒント："+q.hint};
+  if(STEPS[id]){
+    const ta=document.getElementById("shiki"),rb=document.getElementById("reveal");
+    rb.onclick=()=>{const v=ta.value.trim();if(!v){toast("先に式を書いてね");ta.focus();return}
+      ta.readOnly=true;rb.hidden=true;document.getElementById("hintBtn").hidden=true;
+      const rv=document.getElementById("rv");
+      rv.innerHTML=`<div class="cmp"><div><div class="sub">あなたの式</div><div class="shiki">${esc(v)}</div></div>
+        <div><div class="sub">式の例</div><div class="shiki ex">${esc(STEPS[id])}</div></div></div>
+        <div class="fb ok" style="background:var(--lavL)"><div>答え：<b class="big" style="color:var(--lav)">${esc(ansText(q))}</b></div></div>
+        <div class="sub">自分の答えとくらべてみよう</div>
+        <div class="row"><button class="btn main" id="selfOk">あってた♡</button><button class="btn" id="selfNg">ちがった</button></div>`;
+      const fin=ok=>{document.getElementById("selfOk").disabled=true;document.getElementById("selfNg").disabled=true;judge(q,ok)};
+      document.getElementById("selfOk").onclick=()=>fin(true);
+      document.getElementById("selfNg").onclick=()=>fin(false);
+    };
+  }
+  else if(q.t==="in"){const a=document.getElementById("ans");
+    const go=()=>{const v=norm(a.value);if(!v)return;judge(q,v===norm(q.a),v)};
+    document.getElementById("go").onclick=go;a.onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing)go()}}
+  else app.querySelectorAll(".ch").forEach(b=>b.onclick=()=>{
+    app.querySelectorAll(".ch").forEach(x=>{x.disabled=true;if(x.textContent===q.c[0])x.classList.add("ok")});
+    if(b.textContent!==q.c[0])b.classList.add("ng");judge(q,b.textContent===q.c[0])});
+}
+function norm(s){return s.replace(/[０-９]/g,d=>String.fromCharCode(d.charCodeAt(0)-65248)).replace(/[\s　]/g,"").replace(/(cm|Ａ|A|J|Ｊ|倍|本|時間)$/i,"")}
+function kanjiMark(user,ans){return [...user].map((c,i)=>c===ans[i]?esc(c):`<span class="x">${esc(c)}</span>`).join("")}
+function judge(q,ok,typed){
+  document.body.classList.remove("typing");
+  const p=P(q.id);p.seen++;
+  if(R.first[q.id]===undefined)R.first[q.id]=ok;
+  let grad=false;
+  if(ok){if(!R.hint){p.st++;if(p.st>=2&&!p.g){p.g=true;grad=true;R.grads.push(q.id)}}p.w=false}
+  else{p.st=0;p.w=true;if(!R.retried.has(q.id)){R.retried.add(q.id);R.queue.splice(Math.min(R.i+3,R.queue.length),0,q.id)}}
+  R.log.push(ok);save();
+  const ae=document.getElementById("ans");if(ae){ae.disabled=true;document.getElementById("go").disabled=true}
+  document.getElementById("hintBtn").hidden=true;
+  const isK=q.s==="koku";
+  const fb=document.getElementById("fb");
+  fb.innerHTML=`<div class="card"><div class="fb ${ok?"ok":"ng"} pop">
+    <div class="big">${ok?(grad?"卒業！おめでとう":"せいかい！"):"おしい！ここを覚えればOK"}</div>
+    ${!ok&&typed!==undefined&&isK?`<div>あなたの答え：<span class="kanji">${kanjiMark(typed,q.a)}</span></div>`:""}
+    <div>正解：<b>${esc(ansText(q))}</b></div>
+    <div>${esc(q.why)}</div></div>
+    ${PIC[q.id]?`<div class="pic"><div class="pictag">絵で覚えよう</div>${picSVG(q.id)}<div class="piccap">${esc(PIC[q.id].cap)}</div></div>`:""}
+    <div class="memo"><b>覚え方</b>　${esc(q.tip)}${q.chk?"<br><span class=\"sub\">言葉の使い方は教科書によってちがうことがあるよ。先生に確認してね。</span>":""}</div>
+    <button class="btn main" id="next">${R.i+1<R.queue.length?"つぎへ":"結果を見る"}</button></div>`;
+  if(ok)snd(grad?"grad":"ok");
+  if(grad)celebrate();
+  document.getElementById("next").onclick=()=>{R.i++;R.i<R.queue.length?ask():result()};
+  if(!reduce)fb.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function celebrate(){
+  if(reduce){toast("卒業！");return}
+  for(let i=0;i<18;i++){const s=document.createElement("span");s.className="fall";s.textContent=pick(["♡","★","✿"]);
+    s.style.left=Math.random()*100+"vw";s.style.color=pick(["var(--pink)","var(--lav)","var(--memoLine)"]);s.style.animationDelay=Math.random()*.4+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),2000)}
+  const st=document.createElement("div");st.className="sticker";st.textContent="卒業！";document.body.appendChild(st);setTimeout(()=>st.remove(),1500);
+}
+
+// ---- 結果 ----
+function result(){
+  const ids=Object.keys(R.first),okN=ids.filter(i=>R.first[i]).length,wrong=ids.filter(i=>!R.first[i]);
+  const nm=SUBJ[R.s].nm+(R.cat?"（"+R.cat+"）":""),nick=S.nick.trim()||"ななし";
+  const shareTxt=`【5教科ノート 中2】${nick}\n${nm} ${okN}／${ids.length}問せいかい ♡`;
+  const teachTxt=wrong.length?`教えて！ 5教科ノートの「教え合い」に入れてね → ${wrong.join(" ")}`:"";
+  app.innerHTML=`${topbar(true)}
+  <div class="card pop">
+    <h2>${nm} おつかれさま！</h2>
+    <div class="count"><b>${okN}</b><span>／${ids.length}問 せいかい</span></div>
+    <div>${okN===ids.length?"パーフェクト！この調子で卒業をめざそう。":"まちがえた問題は、次の回に先に出るよ。"}</div>
+  </div>
+  <div class="card"><h3>スコアを見せ合う</h3><div class="share" id="sh">${esc(shareTxt)}</div><button class="btn lav" id="cp1">コピーして友達に送る</button></div>
+  ${wrong.length?`<div class="card"><h3>友達に教えてもらう</h3><div class="sub">問題番号だけ送れば、友達のツールで答えと理由が見られるよ。</div><div class="share" id="tc">${esc(teachTxt)}</div><button class="btn lav" id="cp2">番号をコピー</button></div>`:""}
+  <div class="row"><button class="btn main" id="again">もう1回</button><button class="btn" id="cat">ほかの${SUBJ[R.s].nm}をやる</button><button class="btn" id="home">教科をえらぶ</button></div>`;
+  bindTop();
+  document.getElementById("cp1").onclick=()=>copy(shareTxt,document.getElementById("sh"));
+  if(wrong.length)document.getElementById("cp2").onclick=()=>copy(teachTxt,document.getElementById("tc"));
+  document.getElementById("again").onclick=()=>start(R.s,R.cat);
+  document.getElementById("cat").onclick=()=>cats(R.s);
+  document.getElementById("home").onclick=home;
+}
+function allDone(s,cat=""){
+  const nm=SUBJ[s].nm+(cat?"（"+cat+"）":"");
+  app.innerHTML=`${topbar(true)}<div class="card pop"><h2>${esc(nm)} ぜんぶ卒業！</h2>
+  <div>${mascot(SUBJ[s].prop,90)}</div><div>すごい！ほかのカテゴリにも挑戦しよう。もう一度やりたいときは、記録をリセットしてね。</div>
+  <button class="btn" id="rs">${esc(nm)}の記録をリセット</button><button class="btn" id="oc">ほかの${SUBJ[s].nm}をやる</button></div>`;
+  bindTop();
+  document.getElementById("oc").onclick=()=>cats(s);
+  document.getElementById("rs").onclick=()=>{catIds(s,cat).forEach(id=>delete S.p[id]);save();cats(s)};
+}
+
+// ---- 受験までのスケジュール ----
+const EXAM=new Date(2028,1,15);
+const SCHED=[
+ {s:[2026,9],e:[2026,11],when:"2026年10〜12月",ttl:"中2・2学期",tags:["学校"],d:"定期テストと提出物をていねいに。わからないところは、その週のうちに解決しよう。"},
+ {s:[2027,0],e:[2027,2],when:"2027年1〜3月",ttl:"中2・3学期",tags:["内申"],d:"中2の学年末の成績が内申点に入るよ（9教科×5段階＝45点満点）。学年末テストが勝負！"},
+ {s:[2027,2],e:[2027,3],when:"2027年3〜4月",ttl:"春休み",tags:["自分"],d:"中1・中2の復習スタート。5教科ノートで苦手なカテゴリを見つけよう。"},
+ {s:[2027,4],e:[2027,5],when:"2027年5〜6月",ttl:"中3・1学期",tags:["入試","学校"],d:"県から入試の正式な日程が発表されるよ（例年5月ごろ）。公立高校の合同説明会（例年6月）に行ってみよう。"},
+ {s:[2027,6],e:[2027,7],when:"2027年7〜8月",ttl:"夏休み",tags:["自分","学校"],d:"中1・中2の総復習を仕上げる。学校説明会や見学で、行きたい学校の候補をしぼろう。"},
+ {s:[2027,8],e:[2027,11],when:"2027年9〜12月",ttl:"中3・2学期",tags:["内申","入試"],d:"中3の2学期の成績が内申点に入るよ（9教科×5段階×2倍＝90点満点）。12月ごろの面談で受ける学校を決める。"},
+ {s:[2028,0],e:[2028,0],when:"2028年1月",ttl:"出願",tags:["入試"],d:"私立の推薦入試（例年1月下旬〜）。公立の出願はインターネットで（例年1月下旬）。"},
+ {s:[2028,1],e:[2028,1],when:"2028年2月",ttl:"本番",tags:["入試"],d:"私立の一般入試（例年2月10日ごろ〜）。公立の学力検査は例年2月中旬、合格発表は2月下旬。"}
+];
+const ym=a=>a[0]*12+a[1];
+function monthsLeft(){const n=new Date();return Math.max(0,Math.round((EXAM-n)/(30.44*864e5)))}
+function nowIdx(){const n=new Date(),k=n.getFullYear()*12+n.getMonth();return SCHED.findIndex(x=>k>=ym(x.s)&&k<=ym(x.e))}
+function sched(){
+  const ni=nowIdx(),n=new Date(),k=n.getFullYear()*12+n.getMonth();
+  app.innerHTML=`${topbar(true)}
+  <div class="card"><h2>受験までのスケジュール</h2>
+    <div class="count"><span>本番まで あと約</span><b>${monthsLeft()}</b><span>か月</span></div>
+    <div class="sub">2028年2月の神奈川県公立高校入試に向けた流れだよ。</div></div>
+  <ol class="tl">${SCHED.map((x,i)=>{const st=i===ni?"now":(ym(x.e)<k?"done":"");
+    return `<li class="${st}"><div class="tlwhen">${x.when}${i===ni?'<span class="pill pk">いまここ</span>':""}</div>
+      <div class="tlttl">${x.ttl}　${x.tags.map(t=>`<span class="tag t-${t}">${t}</span>`).join("")}</div>
+      <div class="tld">${x.d}</div></li>`}).join("")}</ol>
+  <div class="memo">2027年以降の日程は、これまでの例年をもとにした目安だよ。正式な日程は神奈川県の発表と学校の先生に確認してね。内申に入る学期も、学校の学期制によってちがうことがあるよ。</div>
+  <button class="btn main" id="toNote">5教科ノートで勉強する</button>`;
+  bindTop();
+  document.getElementById("toNote").onclick=home;
+}
+
+// ---- 教え合い ----
+function teach(val){
+  app.innerHTML=`${topbar(true)}<div class="card">
+    <h2>教え合いモード</h2>
+    <label for="codes">友達から届いた番号（スペース区切り）</label>
+    <input type="text" id="codes" placeholder="例：M02 H05" value="${esc(val)}">
+    <button class="btn main" id="show">答えと理由を見る</button>
+    <div id="tout"></div></div>`;
+  bindTop();
+  const run=()=>{
+    const codes=(document.getElementById("codes").value.toUpperCase().match(/[KMESH]\d{2}/g)||[]);
+    const out=codes.map(c=>Q.find(q=>q.id===c)).filter(Boolean);
+    document.getElementById("tout").innerHTML=out.length?out.map(q=>`<div class="teachcard">
+      <span class="pill">${q.id}・${SUBJ[q.s].nm}・${esc(catOf(q.id))}</span>
+      <div><b>${esc(q.q[0])}</b></div>
+      <div>正解：<b>${esc(ansText(q))}</b></div>
+      ${STEPS[q.id]?`<div class="shiki ex">${esc(STEPS[q.id])}</div>`:""}
+      <div>${esc(q.why)}</div>
+      ${PIC[q.id]?`<div class="pic">${picSVG(q.id)}<div class="piccap">${esc(PIC[q.id].cap)}</div></div>`:""}
+      <div class="memo"><b>覚え方</b>　${esc(q.tip)}</div></div>`).join("")
+      :`<div class="sub">番号が見つからなかったよ。M02 のように「英字1つ＋数字2つ」で入れてね。</div>`;
+  };
+  document.getElementById("show").onclick=run;
+  if(val)run();
+}
+home();
+</script>
+</body>
+</html>
