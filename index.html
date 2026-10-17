@@ -123,6 +123,16 @@ body.typing #qc{padding:14px;gap:10px}
 .tld{font-weight:500;font-size:.95rem}
 .tag{font-family:var(--body);font-size:.72rem;border-radius:99px;padding:1px 9px;font-weight:800}
 .t-内申{background:var(--pink);color:#fff}.t-入試{background:var(--ngL);color:var(--ng)}.t-学校{background:var(--lavL);color:var(--lav)}.t-自分{background:var(--okL);color:var(--ok)}
+.ns-row{display:grid;grid-template-columns:1fr 84px 84px;gap:8px;align-items:center}
+.ns-row label{font-weight:800}
+.ns-head{font-size:.85rem;color:var(--sub);text-align:center;line-height:1.3}.ns-head span:first-child{text-align:left}
+.ns-row select{font:inherit;font-size:1.1rem;font-weight:800;text-align:center;padding:8px 4px;border-radius:12px;border:2.5px solid var(--line);background:var(--card);color:var(--ink);min-height:46px;width:100%}
+.ns-row select:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+.ns-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ns-all{grid-column:1/-1;border-top:2px dashed var(--line);padding-top:8px}
+.ns-num{font-family:var(--head);display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.ns-num b{font-weight:400;font-size:2rem;color:var(--pink)}.ns-all .ns-num b{font-size:2.6rem}
+.ns-num small{font-family:var(--body);font-size:.75rem;color:var(--sub)}
 .teachcard{border-top:2px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
 .toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:99px;font-size:.9rem;z-index:11}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
@@ -357,6 +367,11 @@ function home(){
     ${(()=>{const i=nowIdx();return i>=0?`<div><span class="pill pk">いま</span>　${SCHED[i].ttl}：${SCHED[i].d}</div>`:""})()}
     <button class="btn lav" id="sched">受験までのスケジュールを見る</button>
   </div>
+  <div class="card">
+    <h3>内申点メモ</h3>
+    <div class="sub">通知表の成績を入れると、内申点（135点満点）を自動で計算するよ。</div>
+    <button class="btn" id="naishinBtn">内申点メモをひらく</button>
+  </div>
   <div class="sub">問題は横浜市の中学校の教科書の順番に合わせた、中2・10月ごろまでの範囲のオリジナルだよ。テスト範囲は先生に確認してね。</div>
   <div class="card">
     <label for="nick">ニックネーム（本名は書かないでね）</label>
@@ -375,6 +390,7 @@ function home(){
   app.querySelectorAll(".subj").forEach(b=>b.onclick=()=>cats(b.dataset.s));
   document.getElementById("teach").onclick=()=>teach("");
   document.getElementById("sched").onclick=sched;
+  document.getElementById("naishinBtn").onclick=naishin;
 }
 
 // ---- カテゴリをえらぶ ----
@@ -541,9 +557,51 @@ function sched(){
     <div class="tld">・中2：1年間を通した成績（9教科・5段階）と、観点ごとの評価（A・B・C）<br>・中3：12月末までの成績（内申点は2倍で計算）<br>・総合的な学習の時間、委員会・部活・行事などの活動、ふだんの行動のようすも書かれるよ</div>
     <div class="memo">テストの点だけじゃなく、提出物・授業への取り組み・係や委員会の活動も大事！</div></div>
   <div class="memo">日程は、今年（2027年入試）の神奈川県の募集案内をもとにした目安だよ。2028年入試の正式な日程は、2027年5月ごろに県から発表されるから、学校の先生とあわせて確認してね。</div>
-  <button class="btn main" id="toNote">5教科ノートで勉強する</button>`;
+  <div class="row"><button class="btn" id="toNaishin">内申点メモ</button><button class="btn main" id="toNote">5教科ノートで勉強する</button></div>`;
   bindTop();
   document.getElementById("toNote").onclick=home;
+  document.getElementById("toNaishin").onclick=naishin;
+}
+
+// ---- 内申点メモ ----
+const SUBJ9=["国語","社会","数学","理科","英語","音楽","美術","保健体育","技術・家庭"];
+function NS(){if(!S.naishin)S.naishin={n2:{},n3:{},memo:""};return S.naishin}
+function nsum(o){let s=0,c=0;SUBJ9.forEach(k=>{const v=+o[k];if(v>=1&&v<=5){s+=v;c++}});return {s,c}}
+function naishin(){
+  const N=NS();
+  const opt=(v)=>`<option value="">－</option>`+[5,4,3,2,1].map(n=>`<option value="${n}"${String(v)===String(n)?" selected":""}>${n}</option>`).join("");
+  app.innerHTML=`${topbar(true)}
+  <div class="card"><h2>内申点メモ</h2>
+    <div class="sub">通知表の9教科の成績（5段階）を入れると、内申点を計算するよ。記録はこのスマホの中だけに保存されるよ。</div></div>
+  <div class="card ns-total" id="nsTotal"></div>
+  <div class="card">
+    <div class="ns-row ns-head"><span>教科</span><span>中2<br><small>学年末</small></span><span>中3<br><small>12月末まで</small></span></div>
+    ${SUBJ9.map((k,i)=>`<div class="ns-row"><label for="n2_${i}">${k}</label>
+      <select id="n2_${i}" data-g="n2" data-k="${k}" aria-label="${k} 中2">${opt(N.n2[k])}</select>
+      <select id="n3_${i}" data-g="n3" data-k="${k}" aria-label="${k} 中3">${opt(N.n3[k])}</select></div>`).join("")}
+    <div class="sub">中3の欄は、目標や予想を入れておいてもOK。成績が出たら書きかえよう。</div>
+  </div>
+  <div class="card"><label for="nsMemo"><b>メモ</b>（目標、先生に言われたこと など）</label>
+    <textarea id="nsMemo" rows="4" placeholder="例：数学を4にしたい。提出物を出し忘れない！">${esc(N.memo||"")}</textarea></div>
+  <div class="memo">神奈川県の公立高校の内申点は、中2の成績（9教科×5段階＝45点）＋中3の成績×2（90点）＝135点満点。高校ごとに、内申・学力検査・特色検査をどのくらいの割合で見るかがちがうよ。くわしくは県の選考基準や先生に確認してね。</div>
+  <div class="row"><button class="btn" id="nsSched">スケジュールを見る</button><button class="btn main" id="nsHome">5教科ノートへ</button></div>`;
+  bindTop();
+  const draw=()=>{
+    const a=nsum(N.n2),b=nsum(N.n3),t=a.s+b.s*2,full=a.c===9&&b.c===9;
+    const f=(x,c,m)=>c?`<b>${x}</b><span>／${m}</span>${c<9?`<small>（${c}教科ぶん）</small>`:""}`:`<b>－</b><span>／${m}</span>`;
+    document.getElementById("nsTotal").innerHTML=`
+      <div class="ns-grid">
+        <div><div class="sub">中2</div><div class="ns-num">${f(a.s,a.c,45)}</div></div>
+        <div><div class="sub">中3（×2）</div><div class="ns-num">${f(b.s*2,b.c,90)}</div></div>
+        <div class="ns-all"><div class="sub">合計</div><div class="ns-num">${(a.c||b.c)?`<b>${t}</b><span>／135</span>`:`<b>－</b><span>／135</span>`}</div>
+          <div class="sub">${full?`100点満点にすると <b>${(t/135*100).toFixed(1)}</b> 点`:"ぜんぶ入れると100点満点の換算も出るよ"}</div></div>
+      </div>`;
+  };
+  draw();
+  app.querySelectorAll("select[data-g]").forEach(el=>el.onchange=()=>{N[el.dataset.g][el.dataset.k]=el.value;save();draw()});
+  document.getElementById("nsMemo").oninput=e=>{N.memo=e.target.value.slice(0,500);save()};
+  document.getElementById("nsSched").onclick=sched;
+  document.getElementById("nsHome").onclick=home;
 }
 
 // ---- 教え合い ----
